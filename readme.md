@@ -14,9 +14,8 @@ Tempo de execução gerando função dinamica: Function script() {} Took 15.7843
 1. Adicionar suporte a sites com JavaScript (dinâmicos) — usando por exemplo Playwright.
 2. Salvar os scrapers + metadata (URL, prompt, data de criação) em um banco leve como SQLite.
 3. Interface CLI com Typer (ou até um front)
-4. Validação automática do código gerado pela LLM (testar se compila e retorna algo).
-5. Limpeza automática do HTML antes de mandar para o modelo — usando readability ou algo similar.
-6. Cache de respostas da LLM — para economizar tokens/tempo.
+4. Limpeza automática do HTML antes de mandar para o modelo — usando readability ou algo similar.
+5. Cache de respostas da LLM — para economizar tokens/tempo.
 
 ## Extras pro TCC
 
