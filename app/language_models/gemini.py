@@ -1,4 +1,3 @@
-from pathlib import Path
 from language_models.llm import LLM
 from google import genai
 from google.genai import types
@@ -11,7 +10,7 @@ class Gemini(LLM):
         self.__model = model
         
 
-    def generate_code(self, prompt: str, static_site_url: str, file_path: Path):
+    def generate_code(self, prompt: str, static_site_url: str):
         client = genai.Client(
             api_key=self.__api_key,
         )
@@ -27,16 +26,14 @@ class Gemini(LLM):
             response_mime_type="text/plain",
         )
 
-        # TODO: Retirar a responsabilidade de escrever no arquivo dessa função
-        with open(file_path, "w", encoding="utf-8") as file:
-            # file.write(
-            #     f"# Site URL: {static_site_url}\n# Prompt: {prompt}\n"
-            # )
-            for chunk in client.models.generate_content_stream(
-                model=self.__model,
-                contents=contents,
-                config=generate_content_config,
-            ):
-                file.write(chunk.text)
+        code = ""
+        for chunk in client.models.generate_content_stream(
+            model=self.__model,
+            contents=contents,
+            config=generate_content_config,
+        ):
+            code += chunk.text
+        return code
+                
 
 
