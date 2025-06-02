@@ -13,6 +13,7 @@ gemini = Gemini(
         "Create a function named 'run' that executes the code and returns the data.\n"
         "Do not forget to set the User-Agent header.\n"
         "Return the data in dict format.\n"
+        "If any error occurs, raise an exception.\n"
         "Generate scraping code for:"
     )
 )

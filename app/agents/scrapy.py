@@ -33,4 +33,33 @@ class Scrapy:
                 print(result)
 
                 try_again = input("Deseja criar outro script? Y/N: ").upper()
+
+    def scrapy(self, static_site_url: str, extract_prompt: str):
+        hash = self.__generate_hash(static_site_url, extract_prompt)
+        file_path = self.folder / f'{hash}.py'
+
+        if file_path.exists():
+            is_valid, _ = self.llm.validate_scraper(file_path)
+            if is_valid:
+                try:
+                    result = self.__load_and_run_func(file_path)
+                    print(result)
+                    return
+                except Exception:
+                    print("❌ O script validado falhou na execução. Vamos gerar um novo.")
+            else:
+                print("⚠️ Script existente inválido. Vamos gerar um novo.")
+
+        try_again = 'Y'
+        while try_again == 'Y':
+            self.llm.generate_and_validate(
+                file_path=file_path,
+                static_site_url=static_site_url,
+                prompt=extract_prompt
+            )
+
+            result = self.__load_and_run_func(file_path)
+            print(result)
+
+            try_again = input("Deseja criar outro script? Y/N: ").strip().upper()
     
