@@ -19,7 +19,7 @@ class Gemini(LLM):
         contents = [types.Content(
             role="user",
             parts=[
-                types.Part.from_text(text=f'{self.system_instruction}\n{prompt}\nhtml:{static_site_url}')
+                types.Part.from_text(text=f'{self.system_instruction}\n{prompt}\nsite:{static_site_url}')
             ]
         )]
 
@@ -27,10 +27,11 @@ class Gemini(LLM):
             response_mime_type="text/plain",
         )
 
+        # TODO: Retirar a responsabilidade de escrever no arquivo dessa função
         with open(file_path, "w", encoding="utf-8") as file:
-            file.write(
-                f"# Site URL: {static_site_url}\n# Prompt: {prompt}\n"
-            )
+            # file.write(
+            #     f"# Site URL: {static_site_url}\n# Prompt: {prompt}\n"
+            # )
             for chunk in client.models.generate_content_stream(
                 model=self.__model,
                 contents=contents,

@@ -28,7 +28,7 @@ class Scrapy:
         else:
             try_again = 'Y'
             while try_again == 'Y':
-                self.llm.generate_code(file_path=file_path, static_site_url=static_site_url, prompt=extract_prompt)
+                self.llm.generate_and_validate(file_path=file_path, static_site_url=static_site_url, prompt=extract_prompt)
                 result = self.__load_and_run_func(file_path)
                 print(result)
 
