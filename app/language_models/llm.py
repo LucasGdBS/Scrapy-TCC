@@ -2,6 +2,7 @@ from abc import abstractmethod, ABC
 from pathlib import Path
 import importlib.util
 import traceback
+from web_page.web_page import WebPage
 
 class LLM(ABC):
     @classmethod
@@ -12,7 +13,6 @@ class LLM(ABC):
         This method should be implemented by subclasses. The generated code must include a function named 'run'.
         Args:
             prompt (str): The prompt describing the code to be generated.
-            static_site_url (str): The URL of the static site to be used as context.
         Returns:
             str | None: The generated code as a string, or None if code generation fails.
         """
@@ -36,19 +36,20 @@ class LLM(ABC):
         
         except Exception:
             return False, traceback.format_exc()
-    # TODO: não enviar a URL, e sim o HTML limpo
+    # TODO: Limpar o HTML antes de enviar
     def generate_and_validate(
-            self, prompt: str,
-            site: str,
+            self,
+            prompt: str,
+            web_page: WebPage,
             file_path: Path,
             max_attempts: int = 3
     ) -> str | None:
         initial_prompt = prompt
 
         for _ in range(max_attempts):
-            code = self.generate_code(prompt, site)
+            code = self.generate_code(prompt, web_page.html)
 
-            header = f"# Site URL: {site}\n# Prompt: {initial_prompt}\n\n"
+            header = f"# Site URL: {web_page.url}\n# Prompt: {initial_prompt}\n\n"
             full_code = header + code
             file_path.write_text(full_code, encoding='utf-8')
 

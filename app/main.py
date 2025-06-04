@@ -30,6 +30,6 @@ def main():
         WebPage(static_site_url)
     )
 
-    scrapy.scrapy(static_site_url, extract_prompt)
+    scrapy.scrapy(extract_prompt)
 
 main()
