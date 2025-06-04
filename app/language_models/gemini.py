@@ -1,6 +1,7 @@
 from language_models.llm import LLM
 from google import genai
 from google.genai import types
+from web_page.web_page import WebPage
 
 
 class Gemini(LLM):
@@ -10,7 +11,7 @@ class Gemini(LLM):
         self.__model = model
         
 
-    def generate_code(self, prompt: str, site: str):
+    def generate_code(self, prompt: str, web_page: WebPage):
         client = genai.Client(
             api_key=self.__api_key,
         )
@@ -18,7 +19,9 @@ class Gemini(LLM):
         contents = [types.Content(
             role="user",
             parts=[
-                types.Part.from_text(text=f'{self.system_instruction}\n{prompt}\nsite:{site}')
+                types.Part.from_text(
+                    text=f'{self.system_instruction}\n{prompt}\nurl:{web_page.url}html:{web_page.html}'
+                )
             ]
         )]
 

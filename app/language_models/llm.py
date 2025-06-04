@@ -7,7 +7,7 @@ from web_page.web_page import WebPage
 class LLM(ABC):
     @classmethod
     @abstractmethod
-    def generate_code(self, prompt: str, site: str) -> str | None:
+    def generate_code(self, prompt: str, web_page: WebPage) -> str | None:
         """
         Generate code based on the provided prompt and static site URL.
         This method should be implemented by subclasses. The generated code must include a function named 'run'.
@@ -47,7 +47,7 @@ class LLM(ABC):
         initial_prompt = prompt
 
         for _ in range(max_attempts):
-            code = self.generate_code(prompt, web_page.html)
+            code = self.generate_code(prompt, web_page)
 
             header = f"# Site URL: {web_page.url}\n# Prompt: {initial_prompt}\n\n"
             full_code = header + code
