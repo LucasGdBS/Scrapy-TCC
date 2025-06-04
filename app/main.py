@@ -1,6 +1,7 @@
 from decouple import config as env
 from language_models.gemini import Gemini
 from agents.scrapy import Scrapy
+from web_page.web_page import WebPage
 
 GEMINI_API_KEY = env('GEMINI_API_KEY')
 gemini = Gemini(
@@ -18,12 +19,16 @@ gemini = Gemini(
     )
 )
 
-scrapy = Scrapy(gemini)
 
 # Script
 def main():
     static_site_url = input("Coloque a URL do site estatico que você quer raspar: ")
     extract_prompt = input("Explique quais dados você quer: ")
+    
+    scrapy = Scrapy(
+        gemini,
+        WebPage(static_site_url)
+    )
 
     scrapy.scrapy(static_site_url, extract_prompt)
 

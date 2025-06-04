@@ -36,7 +36,7 @@ class LLM(ABC):
         
         except Exception:
             return False, traceback.format_exc()
-    
+    # TODO: não enviar a URL, e sim o HTML limpo
     def generate_and_validate(
             self, prompt: str,
             static_site_url: str,
