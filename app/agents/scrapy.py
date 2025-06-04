@@ -21,8 +21,8 @@ class Scrapy:
         spec.loader.exec_module(scraper)
         return scraper.run()
 
-    def scrapy(self, static_site_url: str, extract_prompt: str):
-        hash = self.__generate_hash(static_site_url, extract_prompt)
+    def scrapy(self, site: str, extract_prompt: str):
+        hash = self.__generate_hash(site, extract_prompt)
         file_path = self.folder / f'{hash}.py'
 
         if file_path.exists():
@@ -42,7 +42,7 @@ class Scrapy:
             is_dynamic = self.web_page.is_dynamic
             self.llm.generate_and_validate(
                 file_path=file_path,
-                static_site_url=static_site_url,
+                site=site,
                 prompt=extract_prompt + (' The site is dynamic, so use Sync Playwright.' if is_dynamic else ' The site is static, so use BeatifulSoup and requests')
             )
 

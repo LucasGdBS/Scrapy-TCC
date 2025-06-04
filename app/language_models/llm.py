@@ -6,7 +6,7 @@ import traceback
 class LLM(ABC):
     @classmethod
     @abstractmethod
-    def generate_code(self, prompt: str, static_site_url: str) -> str | None:
+    def generate_code(self, prompt: str, site: str) -> str | None:
         """
         Generate code based on the provided prompt and static site URL.
         This method should be implemented by subclasses. The generated code must include a function named 'run'.
@@ -39,16 +39,16 @@ class LLM(ABC):
     # TODO: não enviar a URL, e sim o HTML limpo
     def generate_and_validate(
             self, prompt: str,
-            static_site_url: str,
+            site: str,
             file_path: Path,
             max_attempts: int = 3
     ) -> str | None:
         initial_prompt = prompt
 
         for _ in range(max_attempts):
-            code = self.generate_code(prompt, static_site_url)
+            code = self.generate_code(prompt, site)
 
-            header = f"# Site URL: {static_site_url}\n# Prompt: {initial_prompt}\n\n"
+            header = f"# Site URL: {site}\n# Prompt: {initial_prompt}\n\n"
             full_code = header + code
             file_path.write_text(full_code, encoding='utf-8')
 

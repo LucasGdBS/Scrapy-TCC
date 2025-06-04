@@ -10,7 +10,7 @@ class Gemini(LLM):
         self.__model = model
         
 
-    def generate_code(self, prompt: str, static_site_url: str):
+    def generate_code(self, prompt: str, site: str):
         client = genai.Client(
             api_key=self.__api_key,
         )
@@ -18,7 +18,7 @@ class Gemini(LLM):
         contents = [types.Content(
             role="user",
             parts=[
-                types.Part.from_text(text=f'{self.system_instruction}\n{prompt}\nsite:{static_site_url}')
+                types.Part.from_text(text=f'{self.system_instruction}\n{prompt}\nsite:{site}')
             ]
         )]
 
