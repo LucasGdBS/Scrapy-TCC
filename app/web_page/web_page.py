@@ -1,6 +1,7 @@
 import re
 from requests import get
 from bs4 import BeautifulSoup
+from playwright.sync_api import sync_playwright
 
 class WebPage:
     def __init__(self, url:str):
@@ -21,6 +22,20 @@ class WebPage:
                 return html, soup
         except Exception as e:
             print(f"[Error] Could not fetch the page {e}")
+            return None, None
+
+    def fetch_dynamic_page(self):
+        try:
+            with sync_playwright() as p:
+                browser = p.chromium.launch(headless=True)
+                page = browser.new_page()
+                page.goto(self.url, timeout=15000)
+                html = page.content()
+                soup = BeautifulSoup(html, 'html.parser')
+                browser.close()
+                return html, soup
+        except Exception as e:
+            print(f"[Error] Could not fetch dynamic page {e}")
             return None, None
     
     def __detect_js_framework(self, html: str) -> bool:
@@ -103,4 +118,8 @@ class WebPage:
 
         if explanation:
             print(f"[Result] Final score: {score} (>=3 indicates dynamic page)")
+        
+        is_dynamic = score >= 3
+        if is_dynamic:
+            self.html, self.soup = self.fetch_dynamic_page()
         return score >= 3
